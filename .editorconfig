@@ -1,0 +1,4 @@
+# this use for ktlint config
+# see more at https://github.com/pinterest/ktlint#editorconfig
+root = true
+[*.{kt, kts}]
