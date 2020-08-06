@@ -38,7 +38,7 @@ android {
             versionCode = 1
             versionName = "1.0.0"
 
-            resValue("string", "app_name", "Android Team Base Dev")
+            resValue("string", "app_name", "Android Team Base")
             buildConfigField("String", "END_POINT", "\"https://api-dev.neo-lab.com/v1/\"")
         }
 
@@ -73,6 +73,10 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     sourceSets["main"].java.srcDir("src/main/kotlin")
