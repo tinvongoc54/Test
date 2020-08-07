@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neolab.mvvm_architecture.utils.DataResult
-import com.neolab.mvvm_architecture.utils.liveData.SingleLiveData
+import com.neolab.mvvm_architecture.utils.liveData.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
  */
 abstract class BaseViewModel : ViewModel() {
 
-    val isLoading = SingleLiveData<Boolean>()
-    val errorMessage = SingleLiveData<String>()
+    val isLoading = MutableLiveData<Event<Boolean>>()
+    val errorMessage = MutableLiveData<Event<String>>()
 
     private var loadingCount = 0
 
@@ -37,7 +37,7 @@ abstract class BaseViewModel : ViewModel() {
                     liveData.value = asynchronousTasks.data
                 }
                 is DataResult.Error -> onError(asynchronousTasks.exception)?.let {
-                    errorMessage.value = it
+                    errorMessage.value = Event(it)
                 }
             }
             hideLoading(isShowLoading)
@@ -56,7 +56,7 @@ abstract class BaseViewModel : ViewModel() {
     protected fun showLoading(isShowLoading: Boolean) {
         if (!isShowLoading) return
         loadingCount++
-        if (isLoading.value != true) isLoading.value = true
+        if (isLoading.value?.peekContent() != true) isLoading.value = Event(true)
     }
 
     protected fun hideLoading(isShowLoading: Boolean) {
@@ -65,7 +65,7 @@ abstract class BaseViewModel : ViewModel() {
         if (loadingCount <= 0) {
             // reset loadingCount
             loadingCount = 0
-            isLoading.value = false
+            isLoading.value = Event(true)
         }
     }
 }
