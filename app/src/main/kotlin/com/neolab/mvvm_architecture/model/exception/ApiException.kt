@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 class ApiException(val code: Int, val error: ApiError) : RuntimeException() {
 
     override val message: String? by lazy {
-        return@lazy ("${code}: ${error.message}")
+        return@lazy ("$code: ${error.message}")
     }
 
     /**

@@ -7,7 +7,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 
-
 class KeyboardDetector(
     activity: AppCompatActivity,
     private val rootLayout: View,
@@ -28,7 +27,6 @@ class KeyboardDetector(
     init {
         activity.lifecycle.addObserver(ActivityObserver())
     }
-
 
     private inner class ActivityObserver : LifecycleObserver {
 
@@ -53,5 +51,4 @@ class KeyboardDetector(
     }
 
     fun isOpen() = isOpen
-
 }

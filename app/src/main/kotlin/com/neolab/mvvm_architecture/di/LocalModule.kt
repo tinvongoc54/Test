@@ -14,12 +14,15 @@ val localModule = module {
     single { providerSharedPrefsWrapper(get(), get()) }
 }
 
-fun providerSharedPrefs(app: Application) : SharedPreferences{
+fun providerSharedPrefs(app: Application): SharedPreferences {
     return app.getSharedPreferences(
         SharedPrefKeys.SHARED_PREFS_NAME, Context.MODE_PRIVATE
     )
 }
 
-fun providerSharedPrefsWrapper(sharedPreferences: SharedPreferences, gson: Gson) : SharedPrefsWrapper{
+fun providerSharedPrefsWrapper(
+    sharedPreferences: SharedPreferences,
+    gson: Gson
+): SharedPrefsWrapper {
     return SharedPrefsWrapper(sharedPreferences, gson)
 }

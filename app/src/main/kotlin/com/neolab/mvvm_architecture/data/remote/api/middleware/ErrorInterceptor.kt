@@ -3,12 +3,12 @@ package com.neolab.mvvm_architecture.data.remote.api.middleware
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.neolab.mvvm_architecture.model.exception.ApiException
+import java.nio.charset.Charset
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import okio.Buffer
 import okio.BufferedSource
-import java.nio.charset.Charset
 
 class ErrorInterceptor(private val gson: Gson) : Interceptor {
 
@@ -19,9 +19,9 @@ class ErrorInterceptor(private val gson: Gson) : Interceptor {
         if (response.isSuccessful) {
             return response
         }
-        //Parcel error data here
+        // Parcel error data here
         val body = response.body
-        if (body != null) {
+        body?.let {
             try {
                 val source: BufferedSource = body.source()
                 source.request(Long.MAX_VALUE) // Buffer the entire body.

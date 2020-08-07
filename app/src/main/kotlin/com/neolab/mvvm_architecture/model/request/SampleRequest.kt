@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 class SampleRequest(
     @SerializedName("sample_property")
-    val sampleProperty : Any
+    val sampleProperty: Any
 )

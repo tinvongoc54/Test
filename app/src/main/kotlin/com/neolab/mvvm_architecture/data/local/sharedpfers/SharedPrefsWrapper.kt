@@ -47,4 +47,3 @@ class SharedPrefsWrapper(val sharedPrefs: SharedPreferences, val gson: Gson) {
         } as LiveData<T>
     }
 }
-

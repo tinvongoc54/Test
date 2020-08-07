@@ -1,5 +1,4 @@
 package com.neolab.mvvm_architecture.di
-
 import android.annotation.SuppressLint
 import android.app.Application
 import com.google.gson.Gson
@@ -7,6 +6,13 @@ import com.neolab.mvvm_architecture.BuildConfig
 import com.neolab.mvvm_architecture.data.remote.api.ApiService
 import com.neolab.mvvm_architecture.data.remote.api.middleware.ConnectivityInterceptor
 import com.neolab.mvvm_architecture.data.remote.api.middleware.InterceptorImpl
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -15,13 +21,6 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.security.cert.CertificateException
-import java.security.cert.X509Certificate
-import java.util.concurrent.TimeUnit
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
 
 /**
  * Copyright © 2020 Neolab VN.
@@ -76,7 +75,6 @@ fun providerX509TrustManager(): X509TrustManager {
     }
 }
 
-
 fun providerSslSocketFactory(trust: X509TrustManager): SSLSocketFactory {
     // Install the all-trusting trust manager
     val sslContext = SSLContext.getInstance("SSL")
@@ -85,14 +83,14 @@ fun providerSslSocketFactory(trust: X509TrustManager): SSLSocketFactory {
     return sslContext.socketFactory
 }
 
-
 fun providerConnectivityInterceptor(app: Application): ConnectivityInterceptor =
     ConnectivityInterceptor(
         app
     )
 
 fun provideOkHttpClient(
-    cache: Cache, interceptor: Interceptor,
+    cache: Cache,
+    interceptor: Interceptor,
     sslSocketFactory: SSLSocketFactory,
     trustAllCerts: X509TrustManager,
     connectivityInterceptor: ConnectivityInterceptor

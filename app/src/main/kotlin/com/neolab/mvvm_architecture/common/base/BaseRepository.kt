@@ -1,10 +1,9 @@
 package com.neolab.mvvm_architecture.common.base
-
 import com.neolab.mvvm_architecture.utils.DataResult
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
 
 abstract class BaseRepository {
 
@@ -34,5 +33,4 @@ abstract class BaseRepository {
         context: CoroutineContext = Dispatchers.IO,
         requestBlock: suspend CoroutineScope.() -> R
     ): DataResult<R> = withResultContext(context, requestBlock, null)
-
 }

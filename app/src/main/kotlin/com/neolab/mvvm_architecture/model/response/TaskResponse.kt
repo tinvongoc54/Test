@@ -6,5 +6,5 @@ data class TaskResponse(
     @SerializedName("id")
     val id: String,
     @SerializedName("task_name")
-    val name : String
+    val name: String
 )
