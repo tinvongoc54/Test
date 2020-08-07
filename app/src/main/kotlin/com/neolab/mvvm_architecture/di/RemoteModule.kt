@@ -1,11 +1,12 @@
 package com.neolab.mvvm_architecture.di
 
+import android.annotation.SuppressLint
 import android.app.Application
 import com.google.gson.Gson
 import com.neolab.mvvm_architecture.BuildConfig
 import com.neolab.mvvm_architecture.data.remote.api.ApiService
+import com.neolab.mvvm_architecture.data.remote.api.middleware.ConnectivityInterceptor
 import com.neolab.mvvm_architecture.data.remote.api.middleware.InterceptorImpl
-import java.util.concurrent.TimeUnit
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -14,6 +15,13 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 /**
  * Copyright © 2020 Neolab VN.
@@ -23,7 +31,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 val remoteModule = module {
     single { provideOkHttpCache(androidApplication()) }
     single { provideInterceptor() }
-    single { provideOkHttpClient(get(), get()) }
+    single { providerX509TrustManager() }
+    single { providerSslSocketFactory(get()) }
+    single { providerConnectivityInterceptor(androidApplication()) }
+    single { provideOkHttpClient(get(), get(), get(), get(), get()) }
     single { provideRetrofit(get(), get()) }
     single { provideApi(get()) }
 }
@@ -41,7 +52,51 @@ fun provideOkHttpCache(app: Application): Cache {
     return Cache(app.cacheDir, cacheSize)
 }
 
-fun provideOkHttpClient(cache: Cache, interceptor: Interceptor): OkHttpClient {
+/**
+ * Instance of this interface manage which X509 certificates
+ * may be used to authenticate the remote side of a secure socket.
+ * Decisions may be based on trusted certificate authorities, certificate revocation lists,
+ * online status checking or other means.
+ */
+@SuppressLint("TrustAllX509TrustManager")
+fun providerX509TrustManager(): X509TrustManager {
+    // Create a trust manager that does not validate certificate chains
+    return object : X509TrustManager {
+        @Throws(CertificateException::class)
+        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+        }
+
+        @Throws(CertificateException::class)
+        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+        }
+
+        override fun getAcceptedIssuers(): Array<X509Certificate> {
+            return arrayOf()
+        }
+    }
+}
+
+
+fun providerSslSocketFactory(trust: X509TrustManager): SSLSocketFactory {
+    // Install the all-trusting trust manager
+    val sslContext = SSLContext.getInstance("SSL")
+    sslContext.init(null, arrayOf(trust), java.security.SecureRandom())
+    // Create an ssl socket factory with our all-trusting manager
+    return sslContext.socketFactory
+}
+
+
+fun providerConnectivityInterceptor(app: Application): ConnectivityInterceptor =
+    ConnectivityInterceptor(
+        app
+    )
+
+fun provideOkHttpClient(
+    cache: Cache, interceptor: Interceptor,
+    sslSocketFactory: SSLSocketFactory,
+    trustAllCerts: X509TrustManager,
+    connectivityInterceptor: ConnectivityInterceptor
+): OkHttpClient {
     val httpClientBuilder = OkHttpClient.Builder()
     httpClientBuilder.cache(cache)
     httpClientBuilder.addInterceptor(interceptor)
@@ -55,6 +110,9 @@ fun provideOkHttpClient(cache: Cache, interceptor: Interceptor): OkHttpClient {
     httpClientBuilder.connectTimeout(
         RemoteConstants.CONNECTION_TIMEOUT, TimeUnit.SECONDS
     )
+    httpClientBuilder.sslSocketFactory(sslSocketFactory, trustAllCerts)
+    httpClientBuilder.addInterceptor(connectivityInterceptor)
+    httpClientBuilder.hostnameVerifier(HostnameVerifier { _, _ -> true })
 
     if (BuildConfig.DEBUG) {
         val logging = HttpLoggingInterceptor()

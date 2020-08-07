@@ -9,6 +9,7 @@ import com.neolab.mvvm_architecture.databinding.ActivityHomeBinding
  * Created by ThuanPx on 8/5/20.
  */
 class HomeActivity : BaseActivity<HomeViewModel, ActivityHomeBinding>(HomeViewModel::class) {
+
     override fun inflateViewBinding(inflater: LayoutInflater): ActivityHomeBinding {
         return ActivityHomeBinding.inflate(inflater)
     }

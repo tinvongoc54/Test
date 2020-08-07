@@ -2,10 +2,7 @@ package com.neolab.mvvm_architecture.app
 
 import android.app.Application
 import com.neolab.mvvm_architecture.BuildConfig
-import com.neolab.mvvm_architecture.di.appModule
-import com.neolab.mvvm_architecture.di.remoteModule
-import com.neolab.mvvm_architecture.di.repositoryModule
-import com.neolab.mvvm_architecture.di.viewModelModule
+import com.neolab.mvvm_architecture.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -25,7 +22,7 @@ class App : Application() {
     private fun configKoin() {
         startKoin {
             androidContext(this@App)
-            modules(listOf(appModule, remoteModule, repositoryModule, viewModelModule))
+            modules(listOf(appModule, remoteModule, localModule, repositoryModule, viewModelModule))
         }
     }
 

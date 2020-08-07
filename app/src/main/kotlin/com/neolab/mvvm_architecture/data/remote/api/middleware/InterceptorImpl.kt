@@ -1,12 +1,12 @@
 package com.neolab.mvvm_architecture.data.remote.api.middleware
 
 import androidx.annotation.NonNull
-import java.io.IOException
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import java.io.IOException
 
-class InterceptorImpl() : Interceptor {
+class InterceptorImpl : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(@NonNull chain: Interceptor.Chain): Response {
