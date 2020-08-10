@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
-import com.neolab.mvvm_architecture.utils.liveData.EventObserver
+import com.neolab.mvvm_architecture.extension.handleDefaultApiError
+import com.neolab.mvvm_architecture.utils.liveData.observeSingleEvent
 import kotlin.reflect.KClass
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -59,12 +60,12 @@ abstract class BaseDialogFragment<viewModel : BaseViewModel,
 
     open fun onSubscribeObserver() {
         viewModel.run {
-            isLoading.observe(viewLifecycleOwner, EventObserver {
+            isLoading.observeSingleEvent(viewLifecycleOwner) {
                 // TODO show/hide loading
-            })
-            errorMessage.observe(viewLifecycleOwner, EventObserver {
-                // TODO show message
-            })
+            }
+            exception.observeSingleEvent(viewLifecycleOwner) {
+                (activity as? BaseActivity<*, *>)?.handleDefaultApiError(it)
+            }
         }
     }
 }
