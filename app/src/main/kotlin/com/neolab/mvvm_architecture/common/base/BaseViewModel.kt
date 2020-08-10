@@ -22,35 +22,55 @@ abstract class BaseViewModel : ViewModel() {
     /**
      * Calls api with view model scope
      */
-    protected fun <T> withResultViewModelScope(
+    protected fun <T> viewModelScope(
         liveData: MutableLiveData<T>,
         isShowLoading: Boolean = true,
-        onRequest: suspend CoroutineScope.() -> DataResult<T>,
-        onSuccess: (() -> Unit)? = null,
-        onError: (Exception) -> String? = { e -> e.message }
+        onSuccess: ((T) -> Unit)? = null,
+        onError: ((Exception) -> Unit)? = null,
+        onRequest: suspend CoroutineScope.() -> DataResult<T>
     ) {
         viewModelScope.launch {
             showLoading(isShowLoading)
             when (val asynchronousTasks = onRequest(this)) {
                 is DataResult.Success -> {
-                    onSuccess?.invoke()
-                    liveData.value = asynchronousTasks.data
+                    onSuccess?.invoke(asynchronousTasks.data) ?: kotlin.run {
+                        liveData.value = asynchronousTasks.data
+                    }
                 }
-                is DataResult.Error -> onError(asynchronousTasks.exception)?.let {
-                    errorMessage.value = SingleEvent(it)
+                is DataResult.Error -> {
+                    onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
+                        asynchronousTasks.exception.message?.let {
+                            errorMessage.value = SingleEvent(it)
+                        }
+                    }
                 }
             }
             hideLoading(isShowLoading)
         }
     }
 
-    protected fun <T> withResultViewModelScope(
-        liveData: MutableLiveData<T>,
+    protected fun viewModelScope(
         isShowLoading: Boolean = true,
-        onRequest: suspend CoroutineScope.() -> DataResult<T>,
-        onSuccess: (() -> Unit)? = null
+        onSuccess: (() -> Unit)? = null,
+        onError: ((Exception) -> Unit)? = null,
+        onRequest: suspend CoroutineScope.() -> DataResult<Any>
     ) {
-        withResultViewModelScope(liveData, isShowLoading, onRequest, onSuccess) { it.message }
+        viewModelScope.launch {
+            showLoading(isShowLoading)
+            when (val asynchronousTasks = onRequest(this)) {
+                is DataResult.Success -> {
+                    onSuccess?.invoke()
+                }
+                is DataResult.Error -> {
+                    onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
+                        asynchronousTasks.exception.message?.let {
+                            errorMessage.value = SingleEvent(it)
+                        }
+                    }
+                }
+            }
+            hideLoading(isShowLoading)
+        }
     }
 
     protected fun showLoading(isShowLoading: Boolean) {

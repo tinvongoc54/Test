@@ -11,15 +11,10 @@ import androidx.fragment.app.FragmentActivity
 
 fun FragmentActivity?.hideKeyboard() {
     this?.let {
-        val inputManager =
-            this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        inputManager?.let {
-            val v = this.currentFocus
-            v?.let { view ->
-                inputManager.hideSoftInputFromWindow(
-                    view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
-                )
-            }
-        }
+        val inputManager = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val v = this.currentFocus ?: return
+        inputManager.hideSoftInputFromWindow(
+            v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+        )
     }
 }
