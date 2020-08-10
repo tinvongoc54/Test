@@ -6,7 +6,7 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 
-class InterceptorImpl() : Interceptor {
+class InterceptorImpl : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(@NonNull chain: Interceptor.Chain): Response {

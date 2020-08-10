@@ -2,3 +2,4 @@
 # see more at https://github.com/pinterest/ktlint#editorconfig
 root = true
 [*.{kt, kts}]
+disabled_rules=import-ordering
