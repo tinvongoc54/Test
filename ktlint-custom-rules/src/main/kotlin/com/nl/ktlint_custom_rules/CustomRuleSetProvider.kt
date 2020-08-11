@@ -9,6 +9,7 @@ class CustomRuleSetProvider : RuleSetProvider {
         NoElseIfConditionRule(),
         NoSingleNullableCheckRule(),
         NoVarCompanionRule(),
-        NoExclExclRule()
+        NoExclExclRule(),
+        AsSafeRule()
     )
 }
