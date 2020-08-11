@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel : ViewModel() {
 
     val isLoading = MutableLiveData<SingleEvent<Boolean>>()
-    val errorMessage = MutableLiveData<SingleEvent<String>>()
+    val exception = MutableLiveData<SingleEvent<Exception>>()
 
     private var loadingCount = 0
 
@@ -39,9 +39,7 @@ abstract class BaseViewModel : ViewModel() {
                 }
                 is DataResult.Error -> {
                     onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
-                        asynchronousTasks.exception.message?.let {
-                            errorMessage.value = SingleEvent(it)
-                        }
+                        exception.value = SingleEvent(asynchronousTasks.exception)
                     }
                 }
             }
@@ -63,9 +61,7 @@ abstract class BaseViewModel : ViewModel() {
                 }
                 is DataResult.Error -> {
                     onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
-                        asynchronousTasks.exception.message?.let {
-                            errorMessage.value = SingleEvent(it)
-                        }
+                        exception.value = SingleEvent(asynchronousTasks.exception)
                     }
                 }
             }

@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import com.neolab.mvvm_architecture.utils.liveData.EventObserver
+import com.neolab.mvvm_architecture.extension.handleDefaultApiError
+import com.neolab.mvvm_architecture.utils.liveData.observeSingleEvent
 import kotlin.reflect.KClass
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -39,12 +40,12 @@ abstract class BaseActivity<viewModel : BaseViewModel,
 
     open fun onSubscribeObserver() {
         viewModel.run {
-            isLoading.observe(this@BaseActivity, EventObserver {
+            isLoading.observeSingleEvent(this@BaseActivity) {
                 // TODO show/hide loading
-            })
-            errorMessage.observe(this@BaseActivity, EventObserver {
-                // TODO show message
-            })
+            }
+            exception.observeSingleEvent(this@BaseActivity) {
+                handleDefaultApiError(it)
+            }
         }
     }
 }
