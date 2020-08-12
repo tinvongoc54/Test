@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.neolab.mvvm_architecture.extension.handleDefaultApiError
+import com.neolab.mvvm_architecture.utils.liveData.observeSingleEvent
 import kotlin.reflect.KClass
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,7 +29,6 @@ abstract class BaseActivity<viewModel : BaseViewModel,
     abstract fun inflateViewBinding(inflater: LayoutInflater): viewBinding
 
     protected abstract fun initialize()
-    protected abstract fun onSubscribeObserver()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,5 +36,16 @@ abstract class BaseActivity<viewModel : BaseViewModel,
         setContentView(viewBinding.root)
         initialize()
         onSubscribeObserver()
+    }
+
+    open fun onSubscribeObserver() {
+        viewModel.run {
+            isLoading.observeSingleEvent(this@BaseActivity) {
+                // TODO show/hide loading
+            }
+            exception.observeSingleEvent(this@BaseActivity) {
+                handleDefaultApiError(it)
+            }
+        }
     }
 }

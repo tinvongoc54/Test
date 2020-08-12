@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
+import com.neolab.mvvm_architecture.extension.handleDefaultApiError
+import com.neolab.mvvm_architecture.utils.liveData.observeSingleEvent
 import kotlin.reflect.KClass
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,8 +30,9 @@ abstract class BaseDialogFragment<viewModel : BaseViewModel,
 
     private var _viewBinding: viewBinding? = null
     protected val viewBinding get() = _viewBinding!! // ktlint-disable
-
     abstract fun inflateViewBinding(inflater: LayoutInflater): viewBinding
+
+    protected abstract fun initialize()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +43,12 @@ abstract class BaseDialogFragment<viewModel : BaseViewModel,
         return viewBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initialize()
+        onSubscribeObserver()
+    }
+
     /**
      * Fragments outlive their views. Make sure you clean up any references to
      * the binding class instance in the fragment's onDestroyView() method.
@@ -47,5 +56,16 @@ abstract class BaseDialogFragment<viewModel : BaseViewModel,
     override fun onDestroyView() {
         super.onDestroyView()
         _viewBinding = null
+    }
+
+    open fun onSubscribeObserver() {
+        viewModel.run {
+            isLoading.observeSingleEvent(viewLifecycleOwner) {
+                // TODO show/hide loading
+            }
+            exception.observeSingleEvent(viewLifecycleOwner) {
+                (activity as? BaseActivity<*, *>)?.handleDefaultApiError(it)
+            }
+        }
     }
 }
