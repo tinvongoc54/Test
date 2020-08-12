@@ -30,7 +30,7 @@ abstract class BaseFragment<viewModel : BaseViewModel,
 
     private var _viewBinding: viewBinding? = null
     protected val viewBinding get() = _viewBinding!! // ktlint-disable
-    abstract fun inflateViewBinding(inflater: LayoutInflater): viewBinding
+    abstract fun inflateViewBinding(inflater: LayoutInflater, container: ViewGroup?): viewBinding
 
     protected abstract fun initialize()
 
@@ -39,7 +39,7 @@ abstract class BaseFragment<viewModel : BaseViewModel,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _viewBinding = inflateViewBinding(inflater)
+        _viewBinding = inflateViewBinding(inflater, container)
         return viewBinding.root
     }
 
