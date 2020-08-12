@@ -18,5 +18,6 @@ class HomeActivity : BaseActivity<HomeViewModel, ActivityHomeBinding>(HomeViewMo
     }
 
     override fun onSubscribeObserver() {
+        super.onSubscribeObserver()
     }
 }
