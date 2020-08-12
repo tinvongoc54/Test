@@ -116,12 +116,16 @@ fun provideInterceptor(): Interceptor {
     return InterceptorImpl()
 }
 
-fun provideApi(gson: Gson, okHttpClient: OkHttpClient): ApiService {
+private fun createTemplateRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
     return Retrofit.Builder()
         .baseUrl(BuildConfig.END_POINT)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .client(okHttpClient)
-        .build().create(ApiService::class.java)
+        .build()
+}
+
+fun provideApi(gson: Gson, okHttpClient: OkHttpClient): ApiService {
+    return createTemplateRetrofit(okHttpClient, gson).create(ApiService::class.java)
 }
 
 object RemoteConstants {
