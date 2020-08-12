@@ -6,13 +6,6 @@ import com.neolab.mvvm_architecture.BuildConfig
 import com.neolab.mvvm_architecture.data.remote.api.ApiService
 import com.neolab.mvvm_architecture.data.remote.api.middleware.ConnectivityInterceptor
 import com.neolab.mvvm_architecture.data.remote.api.middleware.InterceptorImpl
-import java.security.cert.CertificateException
-import java.security.cert.X509Certificate
-import java.util.concurrent.TimeUnit
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -21,6 +14,13 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 /**
  * Copyright © 2020 Neolab VN.
@@ -34,16 +34,7 @@ val remoteModule = module {
     single { providerSslSocketFactory(get()) }
     single { providerConnectivityInterceptor(androidApplication()) }
     single { provideOkHttpClient(get(), get(), get(), get(), get()) }
-    single { provideRetrofit(get(), get()) }
-    single { provideApi(get()) }
-}
-
-fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
-    return Retrofit.Builder()
-        .baseUrl(BuildConfig.END_POINT)
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .client(okHttpClient)
-        .build()
+    single { provideApi(get(), get()) }
 }
 
 fun provideOkHttpCache(app: Application): Cache {
@@ -125,8 +116,16 @@ fun provideInterceptor(): Interceptor {
     return InterceptorImpl()
 }
 
-fun provideApi(retrofit: Retrofit): ApiService {
-    return retrofit.create(ApiService::class.java)
+private fun createTemplateRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl(BuildConfig.END_POINT)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .client(okHttpClient)
+        .build()
+}
+
+fun provideApi(gson: Gson, okHttpClient: OkHttpClient): ApiService {
+    return createTemplateRetrofit(okHttpClient, gson).create(ApiService::class.java)
 }
 
 object RemoteConstants {
