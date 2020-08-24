@@ -1,4 +1,4 @@
-package com.neolab.mvvm_architecture.model.entity
+package com.neolab.mvvm_architecture.model.uimodel
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
