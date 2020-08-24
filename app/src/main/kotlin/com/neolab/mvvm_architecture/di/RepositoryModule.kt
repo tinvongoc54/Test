@@ -1,7 +1,7 @@
 package com.neolab.mvvm_architecture.di
 
-import com.neolab.mvvm_architecture.data.repository.task.DefaultTaskRepository
-import com.neolab.mvvm_architecture.data.repository.task.TaskRepository
+import com.neolab.mvvm_architecture.repository.task.DefaultTaskRepository
+import com.neolab.mvvm_architecture.repository.task.TaskRepository
 import org.koin.dsl.module
 
 /**

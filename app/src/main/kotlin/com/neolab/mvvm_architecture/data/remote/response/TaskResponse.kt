@@ -1,4 +1,4 @@
-package com.neolab.mvvm_architecture.model.response
+package com.neolab.mvvm_architecture.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
