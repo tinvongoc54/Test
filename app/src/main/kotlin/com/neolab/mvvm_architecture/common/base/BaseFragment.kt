@@ -15,22 +15,22 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Copyright © 2020 Neolab VN.
  * Created by ThuanPx on 8/5/20.
  *
- * @viewModel -> name view model
+ * @VM -> view model
  * @classViewModel -> class view model
- * @viewBinding -> class binding
+ * @VB -> view binding
  * @initialize -> init UI, adapter, listener...
  * @onSubscribeObserver -> subscribe observer live data
  *
  */
 
-abstract class BaseFragment<viewModel : BaseViewModel,
-        viewBinding : ViewBinding>(classViewModel: KClass<viewModel>) : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel,
+        VB : ViewBinding>(classViewModel: KClass<VM>) : Fragment() {
 
-    protected val viewModel: viewModel by viewModel(classViewModel)
+    protected val viewModel: VM by viewModel(classViewModel)
 
-    private var _viewBinding: viewBinding? = null
+    private var _viewBinding: VB? = null
     protected val viewBinding get() = _viewBinding!! // ktlint-disable
-    abstract fun inflateViewBinding(inflater: LayoutInflater, container: ViewGroup?): viewBinding
+    abstract fun inflateViewBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
     protected abstract fun initialize()
 
