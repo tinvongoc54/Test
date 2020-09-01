@@ -46,4 +46,11 @@ class SharedPrefsWrapper(val sharedPrefs: SharedPreferences, val gson: Gson) {
             else -> sharedPrefs.jsonLiveData(key, gson, T::class.java)
         } as LiveData<T>
     }
+    
+    fun removeKey(key: String, commitNow: Boolean = false) {
+        sharedPrefs.edit(commitNow) {remove(key) }
+    }
+
+    infix fun contains(key: String) = sharedPrefs.contains(key)
+
 }
