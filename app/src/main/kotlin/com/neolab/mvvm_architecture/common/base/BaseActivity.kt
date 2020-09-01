@@ -13,20 +13,20 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Copyright © 2020 Neolab VN.
  * Created by ThuanPx on 8/5/20.
  *
- * @viewModel -> name view model
+ * @VM -> view model
  * @classViewModel -> class view model
- * @viewBinding -> class binding
+ * @VB -> view binding
  * @initialize -> init UI, adapter, listener...
  * @onSubscribeObserver -> subscribe observer live data
  *
  */
 
-abstract class BaseActivity<viewModel : BaseViewModel,
-        viewBinding : ViewBinding>(classViewModel: KClass<viewModel>) : AppCompatActivity() {
+abstract class BaseActivity<VM : BaseViewModel,
+        VB : ViewBinding>(classViewModel: KClass<VM>) : AppCompatActivity() {
 
-    protected val viewModel: viewModel by viewModel(classViewModel)
-    protected lateinit var viewBinding: viewBinding
-    abstract fun inflateViewBinding(inflater: LayoutInflater): viewBinding
+    protected val viewModel: VM by viewModel(classViewModel)
+    protected lateinit var viewBinding: VB
+    abstract fun inflateViewBinding(inflater: LayoutInflater): VB
 
     protected abstract fun initialize()
 
