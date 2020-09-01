@@ -52,5 +52,4 @@ class SharedPrefsWrapper(val sharedPrefs: SharedPreferences, val gson: Gson) {
     }
 
     infix fun contains(key: String) = sharedPrefs.contains(key)
-
 }
