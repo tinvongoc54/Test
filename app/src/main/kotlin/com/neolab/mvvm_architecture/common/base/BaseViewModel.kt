@@ -30,7 +30,7 @@ abstract class BaseViewModel : ViewModel() {
         onRequest: suspend CoroutineScope.() -> DataResult<T>
     ) {
         viewModelScope.launch {
-            showLoading(isShowLoading)
+            if (isShowLoading) showLoading()
             when (val asynchronousTasks = onRequest(this)) {
                 is DataResult.Success -> {
                     onSuccess?.invoke(asynchronousTasks.data) ?: kotlin.run {
@@ -43,7 +43,7 @@ abstract class BaseViewModel : ViewModel() {
                     }
                 }
             }
-            hideLoading(isShowLoading)
+            if (isShowLoading) hideLoading()
         }
     }
 
@@ -54,7 +54,7 @@ abstract class BaseViewModel : ViewModel() {
         onRequest: suspend CoroutineScope.() -> DataResult<Any>
     ) {
         viewModelScope.launch {
-            showLoading(isShowLoading)
+            if (isShowLoading) showLoading()
             when (val asynchronousTasks = onRequest(this)) {
                 is DataResult.Success -> {
                     onSuccess?.invoke()
@@ -65,23 +65,21 @@ abstract class BaseViewModel : ViewModel() {
                     }
                 }
             }
-            hideLoading(isShowLoading)
+            if (isShowLoading) hideLoading()
         }
     }
 
-    protected fun showLoading(isShowLoading: Boolean) {
-        if (!isShowLoading) return
+    protected fun showLoading() {
         loadingCount++
         if (isLoading.value?.peekContent() != true) isLoading.value = SingleEvent(true)
     }
 
-    protected fun hideLoading(isShowLoading: Boolean) {
-        if (!isShowLoading) return
+    protected fun hideLoading() {
         loadingCount--
         if (loadingCount <= 0) {
             // reset loadingCount
             loadingCount = 0
-            isLoading.value = SingleEvent(true)
+            isLoading.value = SingleEvent(false)
         }
     }
 }
