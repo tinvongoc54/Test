@@ -1,6 +1,7 @@
 package com.neolab.mvvm_architecture.extension
 
 import android.content.Context
+import android.os.SystemClock
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -64,4 +65,19 @@ fun ImageView.loadImageUrl(imageUrl: String) {
     Glide.with(this.context)
         .load(imageUrl)
         .into(this)
+}
+
+/**
+ * Set an onclick listener
+ */
+inline fun View.debounceClick(timePrevent: Int = 1000, crossinline block: (View) -> Unit) {
+    var lastTimeClicked: Long = 0
+
+    setOnClickListener {
+        if (SystemClock.elapsedRealtime() - lastTimeClicked < timePrevent) {
+            return@setOnClickListener
+        }
+        lastTimeClicked = SystemClock.elapsedRealtime()
+        block(it)
+    }
 }
