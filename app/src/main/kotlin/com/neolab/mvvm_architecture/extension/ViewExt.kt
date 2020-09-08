@@ -5,6 +5,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.neolab.mvvm_architecture.common.base.DebounceClickListener
 
 /**
  * Copyright © 2020 Neolab VN.
@@ -65,3 +66,13 @@ fun ImageView.loadImageUrl(imageUrl: String) {
         .load(imageUrl)
         .into(this)
 }
+
+/**
+ * Set an onclick listener
+ */
+fun <T : View> T.debounceClick(timePrevent: Int = 1000, block: (T) -> Unit) =
+    setOnClickListener(object : DebounceClickListener(timePrevent) {
+        override fun performClick(v: View?) {
+            block(v as T)
+        }
+    })
