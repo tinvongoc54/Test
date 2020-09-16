@@ -79,8 +79,6 @@ android {
         viewBinding = true
     }
 
-    sourceSets["main"].java.srcDir("src/main/kotlin")
-
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/LICENSE")
