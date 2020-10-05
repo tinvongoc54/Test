@@ -34,6 +34,7 @@ object Versions {
     const val lottie = "3.3.1"
     const val kt_ext = "1.0.0"
     const val conscrypt_android = "2.4.0"
+    const val check_dependency_updates = "1.0.211"
 }
 
 /**
@@ -56,6 +57,7 @@ object Plugins {
     const val kotlinApt = "kapt"
     const val detekt = "io.gitlab.arturbosch.detekt"
     const val koin = "koin"
+    const val checkDependencyUpdates = "name.remal.check-dependency-updates"
 }
 
 /**
