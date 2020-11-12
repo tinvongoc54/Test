@@ -6,7 +6,7 @@ plugins {
     kotlin(Plugins.kotlinAndroid)
     kotlin(Plugins.kotlinExt)
     kotlin(Plugins.kotlinApt)
-    id(Plugins.checkDependencyUpdates) version(Versions.check_dependency_updates)
+    id(Plugins.checkDependencyUpdates) version (Versions.check_dependency_updates)
 }
 
 buildscript {
@@ -23,14 +23,8 @@ android {
         applicationId = "com.neolab.mvvm_architecture"
         minSdkVersion(Versions.min_sdk_version)
         targetSdkVersion(Versions.target_sdk_version)
-        versionCode = 1
-        versionName = "1_0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        setProperty(
-            "archivesBaseName",
-            "App-${SimpleDateFormat("HH_mm_dd_MM_yyyy").format(Calendar.getInstance().time)}-$versionName"
-        )
     }
 
     productFlavors {
@@ -50,6 +44,15 @@ android {
             resValue("string", "app_name", "Android Team Base")
             buildConfigField("String", "END_POINT", "\"https://api-dev.neo-lab.com/v1/\"")
         }
+
+        applicationVariants.all {
+            outputs.forEach { output ->
+                if (output is com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
+                    output.outputFileName =
+                        "App-${SimpleDateFormat("HH_mm_dd_MM_yyyy").format(Calendar.getInstance().time)}-v${versionName}(${this.versionCode})-${name}.${output.outputFile.extension}"
+                }
+            }
+        }
     }
 
     buildTypes {
@@ -57,7 +60,9 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"), file("proguard-rules.pro"), file("androidx-proguard-rules.pro")
+                getDefaultProguardFile("proguard-android.txt"),
+                file("proguard-rules.pro"),
+                file("androidx-proguard-rules.pro")
             )
         }
     }
