@@ -1,3 +1,5 @@
+import org.gradle.api.artifacts.dsl.DependencyHandler
+
 /**
  * Created by ThuanPx on 3/15/20.
  * Source: https://docs.gradle.org/current/userguide/kotlin_dsl.html
@@ -35,6 +37,39 @@ object Versions {
     const val kt_ext = "1.0.0"
     const val conscrypt_android = "2.4.0"
     const val check_dependency_updates = "1.0.211"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/recyclerview
+    const val recycler_view = "1.1.0"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/annotation
+    const val annotations = "1.1.0"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/legacy
+    const val legacy = "1.0.0"
+
+    // Release notes https://github.com/junit-team/junit4/wiki
+    const val junit = "4.13"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/archive/test
+    const val test_core = "1.0.0"
+    const val espresso = "3.3.0"
+    const val androidx_test_ktx = "1.1.2"
+    const val text_rule = "1.3.0"
+
+    // Release notes https://github.com/mockito/mockito/releases
+    const val mockito = "3.5.13"
+
+    // Release notes https://github.com/hamcrest/JavaHamcrest/releases
+    const val hamcrest = "1.3"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/arch-core
+    const val arch_core_test = "2.1.0"
+
+    // Release notes https://github.com/robolectric/robolectric/releases
+    const val robolectric = "4.4"
+
+    // Release notes https://github.com/google/truth/releases
+    const val google_truth = "1.0.1"
 }
 
 /**
@@ -116,4 +151,54 @@ object Dependencies {
     const val kt_ext = "com.github.ThuanPx:KtExt:${Versions.kt_ext}"
 
     const val conscrypt_android = "org.conscrypt:conscrypt-android:${Versions.conscrypt_android}"
+}
+
+fun DependencyHandler.implementLocalUnitTest() {
+    add("implementation", "androidx.test.espresso:espresso-idling-resource:${Versions.espresso}")
+    add("testImplementation", "junit:junit:${Versions.junit}")
+    add("testImplementation", "androidx.test.ext:junit-ktx:${Versions.androidx_test_ktx}")
+    add("testImplementation", "androidx.test:core:${Versions.test_core}")
+    add("testImplementation", "org.mockito:mockito-core:${Versions.mockito}")
+    add("testImplementation", "org.hamcrest:hamcrest-all:${Versions.hamcrest}")
+    add("testImplementation", "androidx.test:rules:${Versions.text_rule}")
+    add(
+        "testImplementation",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    )
+    add(
+        "testImplementation",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
+    )
+    add("testImplementation", "androidx.arch.core:core-testing:${Versions.arch_core_test}")
+    add("testImplementation", "org.robolectric:robolectric:${Versions.robolectric}")
+    add("testImplementation", "com.google.truth:truth:${Versions.google_truth}")
+}
+
+fun DependencyHandler.implementInstrumentationUnitTest() {
+    add("androidTestImplementation", "junit:junit:${Versions.junit}")
+    add("androidTestImplementation", "androidx.test.ext:junit-ktx:${Versions.androidx_test_ktx}")
+    add("androidTestImplementation", "org.mockito:mockito-core:${Versions.mockito}")
+    add("androidTestImplementation", "androidx.test:core:${Versions.test_core}")
+    add(
+        "androidTestImplementation",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
+    )
+    add("androidTestImplementation", "androidx.test:rules:${Versions.text_rule}")
+    add("androidTestImplementation", "androidx.arch.core:core-testing:${Versions.arch_core_test}")
+    add("androidTestImplementation", "androidx.test.espresso:espresso-core:${Versions.espresso}")
+    add("androidTestImplementation", "androidx.test.espresso:espresso-contrib:${Versions.espresso}")
+    add("androidTestImplementation", "androidx.test.espresso:espresso-intents:${Versions.espresso}")
+    add(
+        "androidTestImplementation",
+        "androidx.test.espresso.idling:idling-concurrent:${Versions.espresso}"
+    )
+    add("androidTestImplementation", "org.robolectric:annotations:${Versions.robolectric}")
+    add("androidTestImplementation", "com.google.truth:truth:${Versions.google_truth}")
+
+    // Resolve conflicts between main and test APK:
+    add("androidTestImplementation", "androidx.annotation:annotation:${Versions.annotations}")
+    add("androidTestImplementation", "androidx.legacy:legacy-support-v4:${Versions.legacy}")
+    add("androidTestImplementation", "androidx.recyclerview:recyclerview:${Versions.recycler_view}")
+    add("androidTestImplementation", "androidx.appcompat:appcompat:${Versions.appcompat}")
+    add("androidTestImplementation", "com.google.android.material:material:${Versions.material}")
 }

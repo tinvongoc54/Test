@@ -49,7 +49,7 @@ android {
             outputs.forEach { output ->
                 if (output is com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
                     output.outputFileName =
-                        "App-${SimpleDateFormat("HH_mm_dd_MM_yyyy").format(Calendar.getInstance().time)}-v${versionName}(${this.versionCode})-${name}.${output.outputFile.extension}"
+                        "App-${SimpleDateFormat("HH_mm_dd_MM_yyyy").format(Calendar.getInstance().time)}-v$versionName(${this.versionCode})-$name.${output.outputFile.extension}"
                 }
             }
         }
@@ -146,4 +146,8 @@ dependencies {
     implementation(Dependencies.support_core_ktx)
     implementation(Dependencies.view_model_ktx)
     implementation(Dependencies.live_data_ktx)
+
+    // Unit Test
+    implementLocalUnitTest()
+    implementInstrumentationUnitTest()
 }
