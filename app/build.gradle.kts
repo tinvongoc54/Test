@@ -24,7 +24,7 @@ android {
         minSdkVersion(Versions.min_sdk_version)
         targetSdkVersion(Versions.target_sdk_version)
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.neolab.mvvm_architecture.app.CustomTestRunner"
     }
 
     productFlavors {
