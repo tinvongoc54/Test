@@ -96,6 +96,18 @@ android {
         exclude("META-INF/ASL2.0")
         exclude("META-INF/*.kotlin_module")
     }
+
+    sourceSets {
+        sourceSets {
+            val sharedTestDir = "src/sharedTest/java"
+            getByName("androidTest").java.srcDirs(sharedTestDir)
+            getByName("test").java.srcDirs(sharedTestDir)
+        }
+    }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 androidExtensions {
