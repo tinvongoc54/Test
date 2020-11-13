@@ -6,6 +6,9 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import com.neolab.mvvm_architecture.utils.test.EspressoIdlingResource
 
 /**
  * Copyright © 2020 Neolab VN.
@@ -65,6 +68,23 @@ fun ImageView.loadImageUrl(imageUrl: String) {
     Glide.with(this.context)
         .load(imageUrl)
         .into(this)
+}
+
+/**
+ * Transforms static java function Snackbar.make() to an extension function on View.
+ * Using EspressoIdlingResource to wait animation end when ui test running
+ */
+inline fun View.showSnackbar(snackbarText: String, timeLength: Int, moreSetup: (Snackbar) -> Unit) {
+    val snackbar = Snackbar.make(this, snackbarText, timeLength)
+    moreSetup(snackbar)
+    EspressoIdlingResource.increment()
+    snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar?>() {
+        override fun onShown(transientBottomBar: Snackbar?) {
+            EspressoIdlingResource.decrement()
+            snackbar.removeCallback(this)
+        }
+    })
+    snackbar.show()
 }
 
 /**
