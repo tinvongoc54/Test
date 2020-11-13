@@ -2,7 +2,7 @@ package com.neolab.mvvm_architecture.app
 
 import android.app.Application
 import com.neolab.mvvm_architecture.di.appModule
-import com.neolab.mvvm_architecture.di.localTestModule
+import com.neolab.mvvm_architecture.di.testLocalModule
 import com.neolab.mvvm_architecture.di.testRemoteModule
 import com.neolab.mvvm_architecture.di.testRepositoryModule
 import com.neolab.mvvm_architecture.di.viewModelModule
@@ -20,7 +20,7 @@ class TestApp : Application() {
                 listOf(
                     appModule,
                     testRemoteModule,
-                    localTestModule,
+                    testLocalModule,
                     testRepositoryModule,
                     viewModelModule
                 )

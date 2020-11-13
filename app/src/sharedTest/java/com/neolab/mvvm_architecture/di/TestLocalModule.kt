@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 private const val TEST_SHARED_PREFERENCE_FILE_NAME = "TestSharedPreference"
 
-val localTestModule = module {
+val testLocalModule = module {
     single { providerTestSharedPrefs(androidApplication()) }
     single { providerTestSharedPrefsWrapper(get(), get()) }
 }
