@@ -6,7 +6,10 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
  * Versions in project
  */
 object Versions {
+    // Release notes https://github.com/JetBrains/kotlin/blob/master/ChangeLog.md
     const val kotlin = "1.3.72"
+
+    // Release notes https://developer.android.com/studio/releases/gradle-plugin
     const val android_gradle_plugin = "4.0.0"
 
     const val compile_sdk_version = 29
@@ -14,29 +17,58 @@ object Versions {
     const val min_sdk_version = 21
     const val target_sdk_version = 29
 
+    // Release notes https://developer.android.com/jetpack/androidx/releases/appcompat
     const val appcompat = "1.1.0"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/core
     const val core_ktx = "1.1.0"
-    const val ktx = "2.2.0"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/lifecycle
+    const val lifecycle_ktx = "2.2.0"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/constraintlayout
     const val constraint_layout = "1.1.3"
+
+    // Release notes https://developer.android.com/jetpack/androidx/releases/compose-material
     const val material = "1.2.0-beta01"
 
+    // Release notes https://developer.android.com/jetpack/androidx/releases/room
     const val room_version = "2.2.5"
+
+    // Release notes https://github.com/pinterest/ktlint/blob/master/CHANGELOG.md
     const val ktlint = "0.36.0"
-    const val detekt = "1.9.1"
+
+    // Release notes https://github.com/InsertKoinIO/koin/blob/master/CHANGELOG.md
     const val koin = "2.1.5"
-    const val rxjava = "3.0.0"
+
+    // Release notes https://github.com/square/retrofit/blob/master/CHANGELOG.md
     const val retrofit = "2.7.1"
     const val retrofit_adapter_rxjava3 = "3.0.0-RC8"
+
+    // Release notes https://github.com/square/okhttp/blob/master/CHANGELOG.md
     const val okhttp = "4.7.2"
+
+    // Release notes https://github.com/bumptech/glide/releases
     const val glide = "4.8.0"
+
+    // Release notes https://github.com/Kotlin/kotlinx.coroutines/blob/master/CHANGES.md
     const val coroutines = "1.3.2"
+
+    // Release notes https://github.com/JakeWharton/timber/blob/master/CHANGELOG.md
     const val timber = "4.7.1"
+
+    // Release notes https://square.github.io/leakcanary/changelog/
     const val leak_canary = "2.0"
+
+    // Release notes https://plugins.gradle.org/plugin/name.remal.check-dependency-updates
+    const val check_dependency_updates = "1.0.211"
+
     const val pusher = "2.0.2"
     const val lottie = "3.3.1"
     const val kt_ext = "1.0.0"
     const val conscrypt_android = "2.4.0"
-    const val check_dependency_updates = "1.0.211"
+    const val detekt = "1.9.1"
+    const val rxjava = "3.0.0"
 
     // Release notes https://developer.android.com/jetpack/androidx/releases/recyclerview
     const val recycler_view = "1.1.0"
@@ -104,8 +136,8 @@ object Dependencies {
     const val support_design = "com.google.android.material:material:${Versions.material}"
     const val support_core_ktx = "androidx.core:core-ktx:${Versions.core_ktx}"
     const val support_core = "androidx.core:core:${Versions.core_ktx}"
-    const val view_model_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.ktx}"
-    const val live_data_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.ktx}"
+    const val view_model_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle_ktx}"
+    const val live_data_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle_ktx}"
 
     const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     const val constraint_layout =
