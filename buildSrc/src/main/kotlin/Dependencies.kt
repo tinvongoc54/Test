@@ -39,7 +39,7 @@ object Versions {
     const val ktlint = "0.36.0"
 
     // Release notes https://github.com/InsertKoinIO/koin/blob/master/CHANGELOG.md
-    const val koin = "2.1.5"
+    const val koin = "2.2.1"
 
     // Release notes https://github.com/square/retrofit/blob/master/CHANGELOG.md
     const val retrofit = "2.7.1"
@@ -204,6 +204,7 @@ fun DependencyHandler.implementLocalUnitTest() {
     add("testImplementation", "androidx.arch.core:core-testing:${Versions.arch_core_test}")
     add("testImplementation", "org.robolectric:robolectric:${Versions.robolectric}")
     add("testImplementation", "com.google.truth:truth:${Versions.google_truth}")
+    add("testImplementation", "org.koin:koin-test:${Versions.koin}")
 }
 
 fun DependencyHandler.implementInstrumentationUnitTest() {
@@ -233,4 +234,5 @@ fun DependencyHandler.implementInstrumentationUnitTest() {
     add("androidTestImplementation", "androidx.recyclerview:recyclerview:${Versions.recycler_view}")
     add("androidTestImplementation", "androidx.appcompat:appcompat:${Versions.appcompat}")
     add("androidTestImplementation", "com.google.android.material:material:${Versions.material}")
+    add("androidTestImplementation", "org.koin:koin-test:${Versions.koin}")
 }
