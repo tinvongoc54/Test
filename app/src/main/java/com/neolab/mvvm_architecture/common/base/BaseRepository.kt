@@ -28,7 +28,7 @@ abstract class BaseRepository {
                 DataResult.Success(response)
             } catch (e: Exception) {
                 e.printStackTrace()
-                return@withContext errorBlock?.invoke(this, e) ?: DataResult.Error(e)
+                errorBlock?.invoke(this, e) ?: DataResult.Error(e)
             }
         }
     }
