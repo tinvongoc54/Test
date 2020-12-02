@@ -24,7 +24,7 @@ android {
         minSdkVersion(Versions.min_sdk_version)
         targetSdkVersion(Versions.target_sdk_version)
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.neolab.mvvm_architecture.app.CustomTestRunner"
     }
 
     productFlavors {
@@ -49,7 +49,7 @@ android {
             outputs.forEach { output ->
                 if (output is com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
                     output.outputFileName =
-                        "App-${SimpleDateFormat("HH_mm_dd_MM_yyyy").format(Calendar.getInstance().time)}-v${versionName}(${this.versionCode})-${name}.${output.outputFile.extension}"
+                        "App-${SimpleDateFormat("HH_mm_dd_MM_yyyy").format(Calendar.getInstance().time)}-v$versionName(${this.versionCode})-$name.${output.outputFile.extension}"
                 }
             }
         }
@@ -95,6 +95,18 @@ android {
         exclude("META-INF/notice.txt")
         exclude("META-INF/ASL2.0")
         exclude("META-INF/*.kotlin_module")
+    }
+
+    sourceSets {
+        sourceSets {
+            val sharedTestDir = "src/sharedTest/java"
+            getByName("androidTest").java.srcDirs(sharedTestDir)
+            getByName("test").java.srcDirs(sharedTestDir)
+        }
+    }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
 }
 
@@ -146,4 +158,8 @@ dependencies {
     implementation(Dependencies.support_core_ktx)
     implementation(Dependencies.view_model_ktx)
     implementation(Dependencies.live_data_ktx)
+
+    // Unit Test
+    implementLocalUnitTest()
+    implementInstrumentationUnitTest()
 }

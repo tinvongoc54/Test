@@ -1,5 +1,7 @@
 package com.neolab.mvvm_architecture.common.base
+
 import com.neolab.mvvm_architecture.utils.DataResult
+import com.neolab.mvvm_architecture.utils.test.wrapEspressoIdlingResource
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,20 +19,22 @@ abstract class BaseRepository {
      */
     protected suspend fun <R> withResultContext(
         context: CoroutineContext = Dispatchers.IO,
-        requestBlock: suspend CoroutineScope.() -> R,
-        errorBlock: (suspend CoroutineScope.(Exception) -> DataResult.Error)? = null
-    ): DataResult<R> = withContext(context) {
-        return@withContext try {
-            val response = requestBlock()
-            DataResult.Success(response)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return@withContext errorBlock?.invoke(this, e) ?: DataResult.Error(e)
+        errorBlock: (suspend CoroutineScope.(Exception) -> DataResult.Error)? = null,
+        requestBlock: suspend CoroutineScope.() -> R
+    ): DataResult<R> = wrapEspressoIdlingResource {
+        withContext(context) {
+            return@withContext try {
+                val response = requestBlock()
+                DataResult.Success(response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                errorBlock?.invoke(this, e) ?: DataResult.Error(e)
+            }
         }
     }
 
-    protected suspend fun <R> withResultContext(
+    protected suspend fun <R> withRepositoryContext(
         context: CoroutineContext = Dispatchers.IO,
-        requestBlock: suspend CoroutineScope.() -> R
-    ): DataResult<R> = withResultContext(context, requestBlock, null)
+        block: suspend CoroutineScope.() -> R
+    ) = wrapEspressoIdlingResource { withContext(context, block) }
 }

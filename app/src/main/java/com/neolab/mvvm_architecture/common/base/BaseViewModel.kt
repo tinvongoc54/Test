@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neolab.mvvm_architecture.utils.DataResult
 import com.neolab.mvvm_architecture.utils.liveData.SingleEvent
+import com.neolab.mvvm_architecture.utils.test.wrapEspressoIdlingResource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -29,21 +30,23 @@ abstract class BaseViewModel : ViewModel() {
         onError: ((Exception) -> Unit)? = null,
         onRequest: suspend CoroutineScope.() -> DataResult<T>
     ) {
-        viewModelScope.launch {
-            if (isShowLoading) showLoading()
-            when (val asynchronousTasks = onRequest(this)) {
-                is DataResult.Success -> {
-                    onSuccess?.invoke(asynchronousTasks.data) ?: kotlin.run {
-                        liveData.value = asynchronousTasks.data
+        if (isShowLoading) showLoading()
+        wrapEspressoIdlingResource {
+            viewModelScope.launch {
+                when (val asynchronousTasks = onRequest(this)) {
+                    is DataResult.Success -> {
+                        onSuccess?.invoke(asynchronousTasks.data) ?: kotlin.run {
+                            liveData.value = asynchronousTasks.data
+                        }
+                    }
+                    is DataResult.Error -> {
+                        onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
+                            exception.value = SingleEvent(asynchronousTasks.exception)
+                        }
                     }
                 }
-                is DataResult.Error -> {
-                    onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
-                        exception.value = SingleEvent(asynchronousTasks.exception)
-                    }
-                }
+                if (isShowLoading) hideLoading()
             }
-            if (isShowLoading) hideLoading()
         }
     }
 
@@ -53,19 +56,21 @@ abstract class BaseViewModel : ViewModel() {
         onError: ((Exception) -> Unit)? = null,
         onRequest: suspend CoroutineScope.() -> DataResult<Any>
     ) {
-        viewModelScope.launch {
-            if (isShowLoading) showLoading()
-            when (val asynchronousTasks = onRequest(this)) {
-                is DataResult.Success -> {
-                    onSuccess?.invoke()
-                }
-                is DataResult.Error -> {
-                    onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
-                        exception.value = SingleEvent(asynchronousTasks.exception)
+        if (isShowLoading) showLoading()
+        wrapEspressoIdlingResource {
+            viewModelScope.launch {
+                when (val asynchronousTasks = onRequest(this)) {
+                    is DataResult.Success -> {
+                        onSuccess?.invoke()
+                    }
+                    is DataResult.Error -> {
+                        onError?.invoke(asynchronousTasks.exception) ?: kotlin.run {
+                            exception.value = SingleEvent(asynchronousTasks.exception)
+                        }
                     }
                 }
+                if (isShowLoading) hideLoading()
             }
-            if (isShowLoading) hideLoading()
         }
     }
 
