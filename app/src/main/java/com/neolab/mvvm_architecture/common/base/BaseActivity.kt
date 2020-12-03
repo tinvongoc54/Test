@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 abstract class BaseActivity<VM : BaseViewModel,
         VB : ViewBinding>(classViewModel: KClass<VM>) : AppCompatActivity() {
 
-    protected val viewModel: VM by viewModel(classViewModel)
+    protected val viewModel: VM by viewModel(clazz = classViewModel)
     protected lateinit var viewBinding: VB
     abstract fun inflateViewBinding(inflater: LayoutInflater): VB
 

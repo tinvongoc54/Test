@@ -26,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 abstract class BaseDialogFragment<VM : BaseViewModel,
         VB : ViewBinding>(classViewModel: KClass<VM>) : DialogFragment() {
 
-    protected val viewModel: VM by viewModel(classViewModel)
+    protected val viewModel: VM by viewModel(clazz = classViewModel)
 
     private var _viewBinding: VB? = null
     protected val viewBinding get() = _viewBinding!! // ktlint-disable
